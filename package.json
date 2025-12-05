@@ -13,22 +13,31 @@
     "build:electron": "tsc -p tsconfig.electron.json",
     "pack": "npm run build && electron-builder",
     "dist": "npm run build && electron-builder --publish=never",
+    "dist:win": "npm run build && electron-builder --win --x64",
+    "dist:portable": "npm run build && electron-builder --win portable --x64",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["electron", "react", "messenger", "chat", "desktop"],
+  "keywords": [
+    "electron",
+    "react",
+    "messenger",
+    "chat",
+    "desktop"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "electron": "^39.2.5",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "socket.io-client": "^4.8.1",
     "styled-components": "^6.1.19"
   },
   "devDependencies": {
+    "electron": "^39.2.5",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@types/styled-components": "^5.1.36",
     "concurrently": "^9.2.1",
     "css-loader": "^7.1.2",
     "electron-builder": "^26.0.12",
@@ -40,5 +49,42 @@
     "webpack": "^5.103.0",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
+  },
+  "build": {
+    "appId": "com.messenger.app",
+    "productName": "Messenger App",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/electron/**/*",
+      "dist/react/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "portable": {
+      "artifactName": "MessengerApp-${version}-portable.exe"
+    }
   }
 }
